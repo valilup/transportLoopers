@@ -107,19 +107,26 @@
   <div class="container">
     <h2>💶 Euro Cost Calculator</h2>
 
-    <label for="distance">Distance (km):</label>
-    <input type="number" id="distance" placeholder="e.g. 150" />
+    <!-- Wrap inputs in a form -->
+    <form id="calcForm">
+      <label for="distance">Distance (km):</label>
+      <input type="number" id="distance" placeholder="e.g. 150" required />
 
-    <label for="consumption">Consumption (L/100km):</label>
-    <input type="number" id="consumption" step="0.1" placeholder="e.g. 8 for 8L/100km" />
+      <label for="consumption">Consumption (L/100km):</label>
+      <input type="number" id="consumption" step="0.1" placeholder="e.g. 8 for 8L/100km" required />
 
-
-    <button onclick="calculate()">Calculate</button>
+      <button type="submit">Calculate</button>
+    </form>
 
     <div class="result" id="result"></div>
   </div>
 
  <script>
+  document.getElementById("calcForm").addEventListener("submit", function(e) {
+    e.preventDefault(); // Prevent form reload
+    calculate();
+  });
+
   function calculate() {
     const km = parseFloat(document.getElementById('distance').value);
     const rawConsumption = parseFloat(document.getElementById('consumption').value);
@@ -133,7 +140,6 @@
 
     // Convert L/100km to L/km
     const consumption = rawConsumption / 100;
-
     const result = ((km * consumption) * 8) / 5;
 
     resultEl.style.color = "#2e7d32";
