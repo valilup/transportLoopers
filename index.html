@@ -110,32 +110,35 @@
     <label for="distance">Distance (km):</label>
     <input type="number" id="distance" placeholder="e.g. 150" />
 
-    <label for="consumption">Consumption (L/km):</label>
-    <input type="number" id="consumption" step="0.01" placeholder="e.g. 0.06 for 6L/100km" />
+    <label for="consumption">Consumption (L/100km):</label>
+    <input type="number" id="consumption" step="0.1" placeholder="e.g. 8 for 8L/100km" />
+
 
     <button onclick="calculate()">Calculate</button>
 
     <div class="result" id="result"></div>
   </div>
 
-  <script>
-    function calculate() {
-      const km = parseFloat(document.getElementById('distance').value);
-      const consumption = parseFloat(document.getElementById('consumption').value);
-      const resultEl = document.getElementById('result');
+ <script>
+  function calculate() {
+    const km = parseFloat(document.getElementById('distance').value);
+    const rawConsumption = parseFloat(document.getElementById('consumption').value);
+    const resultEl = document.getElementById('result');
 
-      if (isNaN(km) || isNaN(consumption)) {
-        resultEl.textContent = "⚠️ Please enter valid numbers.";
-        resultEl.style.color = "#D32F2F";
-        return;
-      }
-
-      // Fixed formula
-      const result = ((km * consumption) * 8) / 5;
-
-      resultEl.style.color = "#2e7d32";
-      resultEl.textContent = `Total: €${result.toFixed(2)}`;
+    if (isNaN(km) || isNaN(rawConsumption)) {
+      resultEl.textContent = "⚠️ Please enter valid numbers.";
+      resultEl.style.color = "#D32F2F";
+      return;
     }
-  </script>
+
+    // Convert L/100km to L/km
+    const consumption = rawConsumption / 100;
+
+    const result = ((km * consumption) * 8) / 5;
+
+    resultEl.style.color = "#2e7d32";
+    resultEl.textContent = `Total: €${result.toFixed(2)}`;
+  }
+</script>
 </body>
 </html>
