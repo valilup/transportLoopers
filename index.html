@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Euro Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #ece9e6, #ffffff);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: white;
+      width: 100%;
+      max-width: 420px;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      margin-bottom: 25px;
+      color: #333;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: 600;
+      color: #444;
+    }
+
+    input {
+      padding: 12px;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+
+    input:focus {
+      border-color: #4A90E2;
+      outline: none;
+    }
+
+    button {
+      margin-top: 20px;
+      background: #4A90E2;
+      color: white;
+      border: none;
+      padding: 12px;
+      width: 100%;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #357ABD;
+    }
+
+    .result {
+      margin-top: 25px;
+      font-size: 1.3em;
+      font-weight: 600;
+      text-align: center;
+      color: #2e7d32;
+    }
+
+    @media (max-width: 500px) {
+      .container {
+        padding: 20px;
+        border-radius: 12px;
+      }
+
+      h2 {
+        font-size: 1.4em;
+      }
+
+      input, button {
+        font-size: 15px;
+        padding: 10px;
+      }
+
+      .result {
+        font-size: 1.1em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>💶 Euro Cost Calculator</h2>
+
+    <label for="distance">Distance (km):</label>
+    <input type="number" id="distance" placeholder="e.g. 150" />
+
+    <label for="consumption">Consumption (L/km):</label>
+    <input type="number" id="consumption" step="0.01" placeholder="e.g. 0.06 for 6L/100km" />
+
+    <button onclick="calculate()">Calculate</button>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function calculate() {
+      const km = parseFloat(document.getElementById('distance').value);
+      const consumption = parseFloat(document.getElementById('consumption').value);
+      const resultEl = document.getElementById('result');
+
+      if (isNaN(km) || isNaN(consumption)) {
+        resultEl.textContent = "⚠️ Please enter valid numbers.";
+        resultEl.style.color = "#D32F2F";
+        return;
+      }
+
+      // Fixed formula
+      const result = ((km * consumption) * 8) / 5;
+
+      resultEl.style.color = "#2e7d32";
+      resultEl.textContent = `Total: €${result.toFixed(2)}`;
+    }
+  </script>
+</body>
+</html>
