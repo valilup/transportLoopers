@@ -111,118 +111,13 @@
                 font-size: 1.1rem;
             }
         }
-
-        /* Route Finder container bigger & prettier */
-        .container.secondary-app:last-of-type {
-            max-width: 720px;
-            padding: 40px 40px 50px;
-            border-radius: 20px;
-            background: #fefefe;
-            box-shadow: 0 18px 40px rgba(74, 144, 226, 0.15);
-            opacity: 1;
-        }
-
-        .container.secondary-app:last-of-type h2 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 25px;
-        }
-
-        .container.secondary-app:last-of-type label {
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-top: 20px;
-            color: #333;
-        }
-
-        .container.secondary-app:last-of-type input {
-            font-size: 1.1rem;
-            padding: 16px 18px;
-            border: 1.5px solid #b0c4de;
-            border-radius: 14px;
-            box-shadow: inset 0 2px 6px #e3e8f1;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .container.secondary-app:last-of-type input:focus {
-            border-color: #4A90E2;
-            box-shadow: 0 0 10px rgba(74, 144, 226, 0.35);
-            outline: none;
-        }
-
-        .container.secondary-app:last-of-type button {
-            margin-top: 30px;
-            padding: 18px 0;
-            font-size: 1.25rem;
-            font-weight: 700;
-            border-radius: 16px;
-            background: linear-gradient(135deg, #4A90E2, #357ABD);
-            box-shadow: 0 10px 15px rgba(53, 122, 189, 0.6);
-            cursor: pointer;
-            transition: background 0.35s ease;
-        }
-
-        .container.secondary-app:last-of-type button:hover {
-            background: linear-gradient(135deg, #357ABD, #1e4e7f);
-        }
-
-        /* Bigger map with rounder edges and subtle shadow */
-        #map {
-            height: 480px !important;
-            border-radius: 20px !important;
-            box-shadow: 0 15px 30px rgba(74, 144, 226, 0.25);
-            margin-top: 30px !important;
-        }
-
-        /* Route info styling to mimic Google Maps style */
-        #routeInfo {
-            margin-top: 24px;
-            padding: 14px 22px;
-            background: white;
-            border-radius: 30px;
-            box-shadow: 0 6px 15px rgba(74, 144, 226, 0.12);
-            font-weight: 600;
-            font-size: 1.15rem;
-            color: #202124;
-            display: inline-flex;
-            align-items: center;
-            gap: 14px;
-            user-select: none;
-            transition: all 0.4s ease;
-        }
-
-        /* Icons styling inside routeInfo */
-        #routeInfo svg {
-            width: 22px;
-            height: 22px;
-            fill: #4A90E2;
-        }
-
-        /* Responsive improvements */
-        @media (max-width: 760px) {
-            .container.secondary-app:last-of-type {
-                max-width: 95vw;
-                padding: 30px 25px 40px;
-            }
-
-            #map {
-                height: 380px !important;
-            }
-
-            #routeInfo {
-                font-size: 1rem;
-                padding: 12px 18px;
-            }
-        }
-
     </style>
 </head>
 <body>
 
 <!-- MAIN: Band & Expense Calculator -->
 <div class="container main-app">
-    <h2>🎸 Band & Event Cost Estimator</h2>
+    <h2>🎸 The Loopers Band Cost Estimator</h2>
     <form id="bandForm">
         <label for="pricePerPerson">💶 Price per Person (€):</label>
         <input type="number" id="pricePerPerson" placeholder="e.g. 200" required/>
@@ -264,22 +159,6 @@
     <div class="result" id="result"></div>
 </div>
 
-<!-- MAP SECTION -->
-<div class="container secondary-app">
-    <h2>🗺️ Route Finder</h2>
-    <label for="origin">Start Location:</label>
-    <input id="origin" type="text" placeholder="Enter origin..."/>
-
-    <label for="destination">End Location:</label>
-    <input id="destination" type="text" placeholder="Enter destination..."/>
-
-    <button onclick="calculateRoute()">🚗 Show Route</button>
-
-    <div id="map" style="height: 400px; width: 100%; margin-top: 20px; border-radius: 12px;"></div>
-    <div id="routeInfo"></div>
-</div>
-
-
 <!-- JavaScript -->
 <script>
     // Fuel Cost Calculator
@@ -299,7 +178,10 @@
         const result = ((km * consumption) * 8) / 5;
 
         resultEl.style.color = "#2e7d32";
-        resultEl.textContent = `Fuel Cost: €${result.toFixed(2)}`;
+        resultEl.innerHTML =
+       `<div style="font-size: 1.8rem; font-weight: bold; color: #2e7d32; margin-top: 10px;">
+            ⛽ FUEL COST: €${result.toFixed(2)}
+        </div>`;
     });
 
     // Band Cost Calculator
@@ -333,6 +215,7 @@
 
         const summaryText = `
 🧾 TOTAL PRICE: €${total.toFixed(2)}
+
 - 💶 Band price per person: €${pricePerPerson.toFixed(2)}
 - 👥 Number of people: ${numPeople}
 - 🔊 Sound cost: €${sound.toFixed(2)}
@@ -374,68 +257,6 @@ END:VCALENDAR`.trim();
         a.click();
         document.body.removeChild(a);
     }
-
-    // Google Maps Integration
-    let map, directionsService, directionsRenderer;
-
-    function initMap() {
-        const center = {lat: 45.9432, lng: 24.9668};
-        map = new google.maps.Map(document.getElementById("map"), {
-            zoom: 7,
-            center: center,
-        });
-
-        directionsService = new google.maps.DirectionsService();
-        directionsRenderer = new google.maps.DirectionsRenderer({map});
-
-        new google.maps.places.Autocomplete(document.getElementById("origin"));
-        new google.maps.places.Autocomplete(document.getElementById("destination"));
-    }
-
-    function calculateRoute() {
-        const origin = document.getElementById("origin").value;
-        const destination = document.getElementById("destination").value;
-        const routeInfo = document.getElementById("routeInfo");
-
-        if (!origin || !destination) {
-            alert("Please enter both locations.");
-            return;
-        }
-
-        directionsService.route({
-            origin: origin,
-            destination: destination,
-            travelMode: google.maps.TravelMode.DRIVING,
-            provideRouteAlternatives: true,
-        }, (result, status) => {
-            if (status === google.maps.DirectionsStatus.OK) {
-                directionsRenderer.setDirections(result);
-
-                // Show distance and duration of the first route (best)
-                const route = result.routes[0];
-                const leg = route.legs[0];
-                routeInfo.innerHTML = `
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 14h-2v-2H8v-2h3V8h2v4h3v2h-3v2z"/>
-  </svg>
-  <span>Distance: ${leg.distance.text}</span>
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M12 1a11 11 0 1011 11A11 11 0 0012 1zm0 20a9 9 0 119-9 9 9 0 01-9 9zm.5-14h-1v6l5.25 3.15.75-1.23-4.5-2.67z"/>
-  </svg>
-  <span>Duration: ${leg.duration.text}</span>
-`;
-            } else {
-                alert("Directions request failed due to " + status);
-                routeInfo.textContent = "";
-            }
-        });
-    }
-
-</script>
-
-<!-- ✅ Google Maps Script with Places library and initMap callback -->
-<script async
-        src="https://maps.googleapis.com/maps/api/js?key=API&callback=initMap&libraries=places">
 </script>
 </body>
 </html>
