@@ -138,7 +138,9 @@
 
       <button type="submit">Calculate Total</button>
     </form>
-    <div class="result" id="bandResult"></div>
+  <div class="result" id="bandResult"></div>
+<button id="downloadBtn" style="display:none; margin-top: 10px;">⬇️ Download Summary</button>
+<button id="calendarBtn" style="display:none; margin-top: 10px;">📅 Add to Calendar</button>
   </div>
 
   <!-- SECONDARY: Fuel Calculator -->
@@ -187,6 +189,7 @@
       calculateBandCost();
     });
 
+
     function calculateBandCost() {
       const pricePerPerson = parseFloat(document.getElementById('pricePerPerson').value);
       const numPeople = parseInt(document.getElementById('numPeople').value);
@@ -206,14 +209,96 @@
       const extras = sound + dubaRental + dubaTransport + valiTransport;
       const total = bandTotal + extras;
 
-      resultEl.innerHTML = `
-        <div style="font-size: 1rem; color: #555;">🎵 Band: €${bandTotal.toFixed(2)}</div>
-        <div style="font-size: 1rem; color: #777;">➕ Extras: €${extras.toFixed(2)}</div>
-        <div style="font-size: 1.8rem; font-weight: bold; color: #2e7d32; margin-top: 10px;">
-          🧾 TOTAL PRICE: €${total.toFixed(2)}
-        </div>
-      `;
+   resultEl.innerHTML = `
+  <div style="font-size: 1rem; color: #555;">🎵 Band: €${bandTotal.toFixed(2)}</div>
+  <div style="font-size: 1rem; color: #777;">➕ Extras: €${extras.toFixed(2)}</div>
+  <div style="font-size: 1.8rem; font-weight: bold; color: #2e7d32; margin-top: 10px;">
+    🧾 TOTAL PRICE: €${total.toFixed(2)}
+  </div>
+  <div style="margin-top: 20px; text-align: left; font-size: 0.95rem; line-height: 1.6;">
+    <strong>📋 Breakdown:</strong><br>
+    - 💶 Band price per person: €${pricePerPerson.toFixed(2)}<br>
+    - 👥 Number of people: ${numPeople}<br>
+    - 🔊 Sound cost: €${sound.toFixed(2)}<br>
+    - 🚐 Van rental: €${dubaRental.toFixed(2)}<br>
+    - ⛽ Van fuel cost: €${dubaTransport.toFixed(2)}<br>
+    - ⛽ Vali fuel cost: €${valiTransport.toFixed(2)}
+  </div>
+`;
+
+const summaryText = `
+🧾 TOTAL PRICE: €${total.toFixed(2)}
+
+- 💶 Band price per person: €${pricePerPerson.toFixed(2)}
+- 👥 Number of people: ${numPeople}
+- 🔊 Sound cost: €${sound.toFixed(2)}
+- 🚐 Van rental: €${dubaRental.toFixed(2)}
+- ⛽ Van fuel cost: €${dubaTransport.toFixed(2)}
+- ⛽ Vali fuel cost: €${valiTransport.toFixed(2)}
+`;
+
+const calendarBtn = document.getElementById("calendarBtn");
+calendarBtn.style.display = "block";
+calendarBtn.onclick = () => createICSFile(summaryText);
+
     }
+    // Create event
+    function openGoogleCalendar(summaryText) {
+  const title = encodeURIComponent("🎸 Nunta Loopers");
+  const details = encodeURIComponent(summaryText);
+  const location = ""; // optional: you can allow a form input for location if needed
+
+  // Get today's date in YYYYMMDD format
+  const startDate = new Date();
+  const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000); // 2 hours later
+
+  const formatDate = (date) =>
+    date.toISOString().replace(/[-:]|\.\d{3}/g, "").slice(0, 15) + "Z";
+
+  const startStr = formatDate(startDate);
+  const endStr = formatDate(endDate);
+
+  const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&dates=${startStr}/${endStr}&location=${location}`;
+
+  window.open(url, "_blank");
+}
+
+function createICSFile(summaryText) {
+  const now = new Date();
+
+  const formatDate = (date) => {
+    return date.toISOString().split("T")[0].replace(/-/g, "");
+  };
+
+  const startDate = formatDate(now);
+  const endDate = formatDate(new Date(now.getTime() + 24 * 60 * 60 * 1000)); // next day
+
+  const icsContent = `
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//YourApp//BandEvent//EN
+BEGIN:VEVENT
+UID:${Date.now()}@bandevent.com
+DTSTAMP:${startDate}T000000Z
+DTSTART;VALUE=DATE:${startDate}
+DTEND;VALUE=DATE:${endDate}
+SUMMARY:🎸 Nunta Loopers
+DESCRIPTION:${summaryText.replace(/\n/g, "\\n")}
+END:VEVENT
+END:VCALENDAR`.trim();
+
+  const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "Band_Event.ics";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+
   </script>
 </body>
 </html>
