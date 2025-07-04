@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Euro Calculator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Band Event Cost App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     * {
       box-sizing: border-box;
@@ -11,63 +11,75 @@
 
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to right, #ece9e6, #ffffff);
+      background: linear-gradient(120deg, #f0f4f8, #ffffff);
       margin: 0;
-      padding: 20px;
+      padding: 30px 15px;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      min-height: 100vh;
-    }
-
-    .container {
-      background: white;
-      width: 100%;
-      max-width: 420px;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     }
 
     h2 {
-      margin-bottom: 25px;
-      color: #333;
       text-align: center;
+      margin-bottom: 20px;
+      color: #222;
+    }
+
+    .container {
+      background-color: #fff;
+      width: 100%;
+      max-width: 520px;
+      padding: 30px;
+      margin: 20px 0;
+      border-radius: 16px;
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .main-app {
+      border: 3px solid #4A90E2;
+    }
+
+    .secondary-app {
+      opacity: 0.9;
+      background-color: #f8f9fa;
     }
 
     label {
       display: block;
-      margin: 15px 0 5px;
+      margin-top: 15px;
       font-weight: 600;
-      color: #444;
+      color: #555;
     }
 
     input {
+      margin-top: 5px;
       padding: 12px;
       width: 100%;
       border: 1px solid #ccc;
       border-radius: 10px;
-      font-size: 16px;
-      transition: border-color 0.3s;
+      font-size: 15px;
+      transition: border 0.3s ease;
     }
 
     input:focus {
       border-color: #4A90E2;
       outline: none;
+      box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
     }
 
     button {
-      margin-top: 20px;
+      margin-top: 25px;
+      width: 100%;
       background: #4A90E2;
       color: white;
       border: none;
-      padding: 12px;
-      width: 100%;
-      border-radius: 10px;
+      padding: 14px;
+      border-radius: 12px;
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.3s ease;
     }
 
     button:hover {
@@ -76,75 +88,132 @@
 
     .result {
       margin-top: 25px;
-      font-size: 1.3em;
-      font-weight: 600;
       text-align: center;
-      color: #2e7d32;
     }
 
-    @media (max-width: 500px) {
+    @media (max-width: 600px) {
       .container {
         padding: 20px;
         border-radius: 12px;
       }
 
       h2 {
-        font-size: 1.4em;
+        font-size: 1.5rem;
       }
 
-      input, button {
+      input,
+      button {
         font-size: 15px;
-        padding: 10px;
       }
 
       .result {
-        font-size: 1.1em;
+        font-size: 1.1rem;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>💶 Euro Cost Calculator</h2>
 
-    <!-- Wrap inputs in a form -->
+  <!-- MAIN: Band & Expense Calculator -->
+  <div class="container main-app">
+    <h2>🎸 Band & Event Cost Estimator</h2>
+    <form id="bandForm">
+      <label for="pricePerPerson">💶 Price per Person (€):</label>
+      <input type="number" id="pricePerPerson" placeholder="e.g. 200" required />
+
+      <label for="numPeople">👥 Number of People:</label>
+      <input type="number" id="numPeople" placeholder="e.g. 5" required />
+
+      <label for="soundCost">🔊 Sound Cost (€):</label>
+      <input type="number" id="soundCost" placeholder="e.g. 450" />
+
+      <label for="dubaRental">🚐 Van Rental (€):</label>
+      <input type="number" id="dubaRental" placeholder="e.g. 100" />
+
+      <label for="dubaTransport">⛽ Van Fuel Cost (€):</label>
+      <input type="number" id="dubaTransport" placeholder="e.g. 80" />
+
+      <label for="valiTransport">⛽ Vali Fuel Cost (€):</label>
+      <input type="number" id="valiTransport" placeholder="e.g. 70" />
+
+      <button type="submit">Calculate Total</button>
+    </form>
+    <div class="result" id="bandResult"></div>
+  </div>
+
+  <!-- SECONDARY: Fuel Calculator -->
+  <div class="container secondary-app">
+    <h2>💶 Fuel Cost Helper</h2>
     <form id="calcForm">
       <label for="distance">Distance (km):</label>
       <input type="number" id="distance" placeholder="e.g. 150" required />
 
       <label for="consumption">Consumption (L/100km):</label>
-      <input type="number" id="consumption" step="0.1" placeholder="e.g. 8 for 8L/100km" required />
+      <input type="number" id="consumption" step="0.1" placeholder="e.g. 8" required />
 
-      <button type="submit">Calculate</button>
+      <button type="submit">Calculate Fuel Cost</button>
     </form>
-
     <div class="result" id="result"></div>
   </div>
 
- <script>
-  document.getElementById("calcForm").addEventListener("submit", function(e) {
-    e.preventDefault(); // Prevent form reload
-    calculate();
-  });
+  <script>
+    // Fuel Calculator
+    document.getElementById("calcForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      calculateFuel();
+    });
 
-  function calculate() {
-    const km = parseFloat(document.getElementById('distance').value);
-    const rawConsumption = parseFloat(document.getElementById('consumption').value);
-    const resultEl = document.getElementById('result');
+    function calculateFuel() {
+      const km = parseFloat(document.getElementById('distance').value);
+      const rawConsumption = parseFloat(document.getElementById('consumption').value);
+      const resultEl = document.getElementById('result');
 
-    if (isNaN(km) || isNaN(rawConsumption)) {
-      resultEl.textContent = "⚠️ Please enter valid numbers.";
-      resultEl.style.color = "#D32F2F";
-      return;
+      if (isNaN(km) || isNaN(rawConsumption)) {
+        resultEl.textContent = "⚠️ Please enter valid numbers.";
+        resultEl.style.color = "#D32F2F";
+        return;
+      }
+
+      const consumption = rawConsumption / 100;
+      const result = ((km * consumption) * 8) / 5;
+
+      resultEl.style.color = "#2e7d32";
+      resultEl.textContent = `Fuel Cost: €${result.toFixed(2)}`;
     }
 
-    // Convert L/100km to L/km
-    const consumption = rawConsumption / 100;
-    const result = ((km * consumption) * 8) / 5;
+    // Band Calculator
+    document.getElementById("bandForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      calculateBandCost();
+    });
 
-    resultEl.style.color = "#2e7d32";
-    resultEl.textContent = `Total: €${result.toFixed(2)}`;
-  }
-</script>
+    function calculateBandCost() {
+      const pricePerPerson = parseFloat(document.getElementById('pricePerPerson').value);
+      const numPeople = parseInt(document.getElementById('numPeople').value);
+      const sound = parseFloat(document.getElementById('soundCost').value) || 0;
+      const dubaRental = parseFloat(document.getElementById('dubaRental').value) || 0;
+      const dubaTransport = parseFloat(document.getElementById('dubaTransport').value) || 0;
+      const valiTransport = parseFloat(document.getElementById('valiTransport').value) || 0;
+      const resultEl = document.getElementById('bandResult');
+
+      if (isNaN(pricePerPerson) || isNaN(numPeople)) {
+        resultEl.textContent = "⚠️ Please enter the required fields.";
+        resultEl.style.color = "#D32F2F";
+        return;
+      }
+
+      const bandTotal = pricePerPerson * numPeople;
+      const extras = sound + dubaRental + dubaTransport + valiTransport;
+      const total = bandTotal + extras;
+
+      resultEl.innerHTML = `
+        <div style="font-size: 1rem; color: #555;">🎵 Band: €${bandTotal.toFixed(2)}</div>
+        <div style="font-size: 1rem; color: #777;">➕ Extras: €${extras.toFixed(2)}</div>
+        <div style="font-size: 1.8rem; font-weight: bold; color: #2e7d32; margin-top: 10px;">
+          🧾 TOTAL PRICE: €${total.toFixed(2)}
+        </div>
+      `;
+    }
+  </script>
 </body>
 </html>
