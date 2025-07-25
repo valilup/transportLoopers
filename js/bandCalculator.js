@@ -1,58 +1,96 @@
 // Band Cost Calculator
 document.getElementById("bandForm").addEventListener("submit", function (e) {
-  e.preventDefault();
+    e.preventDefault();
 
-  const pricePerPerson = parseFloat(
-    document.getElementById("pricePerPerson").value
-  );
-  const numPeople = parseInt(document.getElementById("numPeople").value);
-  const sound = parseFloat(document.getElementById("soundCost").value) || 0;
-  const dubaRental =
-    parseFloat(document.getElementById("dubaRental").value) || 0;
-  const dubaTransport =
-    parseFloat(document.getElementById("dubaTransport").value) || 0;
-  const valiTransport =
-    parseFloat(document.getElementById("valiTransport").value) || 0;
-  const cantatBiserica =
-    parseFloat(document.getElementById("cantatBiserica").value) || 0;
-  const needHotel = document.getElementById("needHotel").checked;
-  const resultEl = document.getElementById("bandResult");
+    const pricePerPerson = parseFloat(
+        document.getElementById("pricePerPerson").value
+    );
+    const numPeople = parseInt(document.getElementById("numPeople").value);
+    const sound = parseFloat(document.getElementById("soundCost").value) || 0;
+    const dubaRental =
+        parseFloat(document.getElementById("dubaRental").value) || 0;
+    const dubaTransport =
+        parseFloat(document.getElementById("dubaTransport").value) || 0;
+    const valiTransport =
+        parseFloat(document.getElementById("valiTransport").value) || 0;
+    const cantatBiserica =
+        parseFloat(document.getElementById("cantatBiserica").value) || 0;
+    const needHotel = document.getElementById("needHotel").checked;
+    const resultEl = document.getElementById("bandResult");
 
-  if (isNaN(pricePerPerson) || isNaN(numPeople)) {
-    resultEl.textContent = "⚠️ Please enter the required fields.";
-    resultEl.style.color = "#D32F2F";
-    return;
-  }
+    if (isNaN(pricePerPerson) || isNaN(numPeople)) {
+        resultEl.textContent = "⚠️ Please enter the required fields.";
+        resultEl.style.color = "#D32F2F";
+        return;
+    }
 
-  const bandTotal = pricePerPerson * numPeople;
-  const extras =
-    sound + dubaRental + dubaTransport + valiTransport + cantatBiserica;
-  const total = bandTotal + extras;
+    const bandTotal = pricePerPerson * numPeople;
+    const extras =
+        sound + dubaRental + dubaTransport + valiTransport + cantatBiserica;
+    const total = bandTotal + extras;
 
-  const expirationDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-  const day = String(expirationDate.getDate()).padStart(2, "0");
-  const month = String(expirationDate.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
-  const year = expirationDate.getFullYear();
-  const offerExpiration = `${day}-${month}-${year}`;
+    const expirationDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    const day = String(expirationDate.getDate()).padStart(2, "0");
+    const month = String(expirationDate.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+    const year = expirationDate.getFullYear();
+    const offerExpiration = `${day}-${month}-${year}`;
 
-  // Prepare the biserica line if applicable
-  let bisericaLine = "";
-  if (cantatBiserica > 0) {
-    bisericaLine = `<li>+cantat la ceremonia religioasa pian si voce 2-4 piese</li>`;
-  }
+    // date event
+    const romanianMonths = [
+        "Ianuarie", "Februarie", "Martie", "Aprilie", "Mai", "Iunie",
+        "Iulie", "August", "Septembrie", "Octombrie", "Noiembrie", "Decembrie"
+    ];
 
-  // Prepare hotel line if needed
-  let hotelLine = "";
-  if (needHotel) {
-    hotelLine = `<li>⁠⁠1 noapte de cazare din <em><b>XX->XX MONTH</b></em> pentru 5 sau 6 persoane in functie de pachetul ales</li>`;
-  }
+    const eventDateInput = document.getElementById("eventDate").value;
+    let formattedEventDate = "DATE";
 
-  resultEl.innerHTML = `
+// Always compute formattedEventDate if eventDateInput is present
+    if (eventDateInput) {
+        const dateObj = new Date(eventDateInput);
+        const day = String(dateObj.getDate()).padStart(2, "0");
+        const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+        const year = dateObj.getFullYear();
+
+        formattedEventDate = `${day}-${month}-${year}`;
+    }
+
+// Only compute hotelLine if needHotel is true
+
+    let startDay = "";
+    let nextDay = "";
+    let monthName = "";
+
+    let hotelLine = "";
+    if (needHotel) {
+        if (eventDateInput) {
+            const dateObj = new Date(eventDateInput);
+            const nextDayObj = new Date(dateObj);
+            nextDayObj.setDate(dateObj.getDate() + 1);
+
+            startDay = String(dateObj.getDate()).padStart(2, "0");
+            nextDay = String(nextDayObj.getDate()).padStart(2, "0");
+            monthName = romanianMonths[dateObj.getMonth()];
+
+            hotelLine = `<li>⁠⁠1 noapte de cazare din <em><b>${startDay}->${nextDay} ${monthName}</b></em> pentru 5 sau 6 persoane in functie de pachetul ales</li>`;
+        } else {
+            hotelLine = `<li>⁠⁠1 noapte de cazare din <em><b>XX->XX MONTH</b></em> pentru 5 sau 6 persoane in functie de pachetul ales</li>`;
+        }
+    }
+
+
+    // Prepare the biserica line if applicable
+    let bisericaLine = "";
+    if (cantatBiserica > 0) {
+        bisericaLine = `<li>+cantat la ceremonia religioasa pian si voce 2-4 piese</li>`;
+    }
+
+
+    resultEl.innerHTML = `
     <div style="font-size: 1rem; color: #555;">🎵 Band: €${bandTotal.toFixed(
-      2
+        2
     )}</div>
     <div style="font-size: 1rem; color: #777;">➕ Extras: €${extras.toFixed(
-      2
+        2
     )}</div>
     <div style="font-size: 1.8rem; font-weight: bold; color: #2e7d32; margin-top: 10px;">
         🧾 TOTAL PRICE: €${total}
@@ -61,7 +99,7 @@ document.getElementById("bandForm").addEventListener("submit", function (e) {
     <div style="margin-top: 30px; text-align: left; color: #333; line-height: 1.6;">
         <p>==================================</p>
         <p>Salut CLIENT,</p>
-        <p>Am revenit cu oferta pentru <strong>DATE</strong>, <strong>LOCATION</strong></p>
+        <p>Am revenit cu oferta pentru <strong>${formattedEventDate}</strong>, <strong>LOCATION</strong></p>
 
         <h3>Ce oferim la eveniment:</h3>
         <ul>
@@ -117,37 +155,37 @@ document.getElementById("bandForm").addEventListener("submit", function (e) {
         <p>=================================</p>
     </div>`;
 
-  // show church singing line if applicable
-  const cantatBisericaLine =
-    cantatBiserica > 0
-      ? `- ⛪ Church singing: €${cantatBiserica.toFixed(2)}\n`
-      : "";
+    // show church singing line if applicable
+    const cantatBisericaLine =
+        cantatBiserica > 0
+            ? `- ⛪ Church singing: €${cantatBiserica.toFixed(2)}\n`
+            : "";
 
-  const hotel =
-    needHotel === true
-      ? "- 🏨 1 noapte de cazare din XX->XX MONTH pentru 5 sau 6 persoane"
-      : "";
+    const hotel =
+        needHotel === true
+            ? `- 🏨 1 noapte de cazare din ${startDay}->${nextDay} ${monthName} pentru 5 sau 6 persoane`
+            : "";
 
-  const summaryLines = [
-    `- 💶 Band price per person: €${pricePerPerson.toFixed(2)}`,
-    `- 👥 Number of people: ${numPeople}`,
-    `- 🔊 Sound cost: €${sound.toFixed(2)}`,
-    `- 🚐 Van rental: €${dubaRental.toFixed(2)}`,
-    `- ⛽ Van fuel cost: €${dubaTransport.toFixed(2)}`,
-    `- ⛽ Vali fuel cost: €${valiTransport.toFixed(2)}`,
-    cantatBisericaLine.trim(),
-    hotel.trim(),
-  ]
-    .filter((line) => line)
-    .join("\n");
+    const summaryLines = [
+        `- 💶 Band price per person: €${pricePerPerson.toFixed(2)}`,
+        `- 👥 Number of people: ${numPeople}`,
+        `- 🔊 Sound cost: €${sound.toFixed(2)}`,
+        `- 🚐 Van rental: €${dubaRental.toFixed(2)}`,
+        `- ⛽ Van fuel cost: €${dubaTransport.toFixed(2)}`,
+        `- ⛽ Vali fuel cost: €${valiTransport.toFixed(2)}`,
+        cantatBisericaLine.trim(),
+        hotel.trim(),
+    ]
+        .filter((line) => line)
+        .join("\n");
 
-  const summaryText = `
+    const summaryText = `
 🧾 TOTAL PRICE: €${total.toFixed(2)}
 
 ${summaryLines}
 `;
 
-  const calendarBtn = document.getElementById("calendarBtn");
-  calendarBtn.style.display = "block";
-  calendarBtn.onclick = () => createICSFile(summaryText);
+    const calendarBtn = document.getElementById("calendarBtn");
+    calendarBtn.style.display = "block";
+    calendarBtn.onclick = () => createICSFile(summaryText, eventDateInput);
 });

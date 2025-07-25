@@ -1,7 +1,10 @@
-function createICSFile(summaryText) {
-    const now = new Date();
-    const startDate = now.toISOString().split("T")[0].replace(/-/g, "");
-    const endDate = new Date(now.getTime() + 86400000).toISOString().split("T")[0].replace(/-/g, "");
+function createICSFile(summaryText, eventDate) {
+    const eventStart = eventDate
+        ? new Date(eventDate)
+        : new Date();
+
+    const startDate = eventStart.toISOString().split("T")[0].replace(/-/g, "");
+    const endDate = new Date(eventStart.getTime() + 86400000).toISOString().split("T")[0].replace(/-/g, "");
 
     const icsContent = `
 BEGIN:VCALENDAR
