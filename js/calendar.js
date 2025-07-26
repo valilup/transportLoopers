@@ -1,4 +1,4 @@
-function createICSFile(summaryText, eventDate) {
+function createICSFile(summaryText, eventDate, location) {
     const eventStart = eventDate
         ? new Date(eventDate)
         : new Date();
@@ -15,7 +15,7 @@ UID:${Date.now()}@bandevent.com
 DTSTAMP:${startDate}T000000Z
 DTSTART;VALUE=DATE:${startDate}
 DTEND;VALUE=DATE:${endDate}
-SUMMARY:🎸 Nunta Loopers
+SUMMARY:🎸 Nunta Loopers - ${location}
 DESCRIPTION:${summaryText.replace(/\n/g, "\\n")}
 END:VEVENT
 END:VCALENDAR`.trim();

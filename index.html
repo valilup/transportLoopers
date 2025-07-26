@@ -4,6 +4,7 @@
     <meta charset="UTF-8"/>
     <title>Band Event Cost App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
     <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
@@ -11,60 +12,80 @@
 <!-- MAIN: Band & Expense Calculator -->
 <div class="container main-app">
     <h2>🎸 The Loopers Band Cost Estimator</h2>
-    <form id="bandForm">
-        <label for="eventDate">📅 Event Date (optional):</label>
-        <input type="date" id="eventDate"/>
+    <div class="flex-container">
+        <div class="form-section">
+            <form id="bandForm">
+                <label for="clientName">Client name:</label>
+                <input type="string" id="clientName" placeholder="e.g. Mihai Popescu"/>
 
-        <label for="pricePerPerson">💶 Price per Person (€):</label>
-        <input type="number" id="pricePerPerson" placeholder="e.g. 200" required/>
+                <label for="eventDate">📅 Event Date (optional):</label>
+                <input type="date" id="eventDate"/>
 
-        <label for="numPeople">👥 Number of People:</label>
-        <input type="number" id="numPeople" placeholder="e.g. 5" required/>
+                 <label for="weddingLocation">Location:</label>
+                <input type="string" id="weddingLocation" placeholder="e.g. Oradea"/>
 
-        <label for="soundCost">🔊 Sound Cost (€):</label>
-        <input type="number" id="soundCost" placeholder="e.g. 450"/>
+                <label for="pricePerPerson">💶 Price per Person (€):</label>
+                <input type="number" id="pricePerPerson" placeholder="e.g. 200" required/>
 
-        <label for="dubaRental">🚐 Van Rental (€):</label>
-        <input type="number" id="dubaRental" placeholder="e.g. 100"/>
+                <label for="numPeople">👥 Number of People:</label>
+                <input type="number" id="numPeople" placeholder="e.g. 5" required/>
 
-        <label for="dubaTransport">⛽ Van Fuel Cost (€):</label>
-        <input type="number" id="dubaTransport" placeholder="e.g. 80"/>
+                <label for="soundCost">🔊 Sound Cost (€):</label>
+                <input type="number" id="soundCost" placeholder="e.g. 450"/>
 
-        <label for="valiTransport">⛽ Vali Fuel Cost (€):</label>
-        <input type="number" id="valiTransport" placeholder="e.g. 70"/>
+                <label for="dubaRental">🚐 Van Rental (€):</label>
+                <input type="number" id="dubaRental" placeholder="e.g. 100"/>
 
-        <label for="cantatBiserica"> ⛪ Church Singing (€):</label>
-        <input type="number" id="cantatBiserica" placeholder="e.g. 200"/>
+                <label for="dubaTransport">⛽ Van Fuel Cost (€):</label>
+                <input type="number" id="dubaTransport" placeholder="e.g. 80"/>
 
-        <label class="switch">
-            <input type="checkbox" id="needHotel"/>
-            🏨 Need hotel accommodation
-            <span class="slider"></span>
-        </label>
+                <label for="valiTransport">⛽ Vali Fuel Cost (€):</label>
+                <input type="number" id="valiTransport" placeholder="e.g. 70"/>
 
-        <button type="submit">Calculate Total</button>
-    </form>
-    <div class="result" id="bandResult"></div>
-    <button id="downloadBtn" style="display:none; margin-top: 10px;">⬇️ Download Summary</button>
-    <button id="calendarBtn" style="display:none; margin-top: 10px;">📅 Add to Calendar</button>
+                <label for="cantatBiserica"> ⛪ Church Singing (€):</label>
+                <input type="number" id="cantatBiserica" placeholder="e.g. 200"/>
+
+                <label class="switch">
+                    <input type="checkbox" id="needHotel"/>
+                    🏨 Need hotel accommodation
+                    <span class="slider"></span>
+                </label>
+
+                <button type="submit">Calculate Total</button>
+            </form>
+            <div class="button-group">
+                <button id="downloadBtn" class="action-btn" style="display:none;">⬇️ Download Summary</button>
+                <button id="calendarBtn" class="action-btn" style="display:none;">📅 Add to Calendar</button>
+            </div>
+        </div>
+        <div class="result-section">
+            <div class="result" id="bandResult"></div>
+        </div>
+    </div>
 </div>
 
 <!-- SECONDARY: Fuel Calculator & Map -->
 <div class="container secondary-app">
     <h2>💶 Fuel Cost Helper</h2>
-    <form id="calcForm">
-        <label for="distance">Distance (km):</label>
-        <input type="number" id="distance" placeholder="e.g. 150" required/>
+    <div class="flex-container">
+        <div class="form-section">
+            <form id="calcForm">
+                <label for="distance">Distance (km):</label>
+                <input type="number" id="distance" placeholder="e.g. 150" required/>
 
-        <label for="consumption">Consumption (L/100km):</label>
-        <input type="number" id="consumption" step="0.1" placeholder="e.g. 8" required/>
+                <label for="consumption">Consumption (L/100km):</label>
+                <input type="number" id="consumption" step="0.1" placeholder="e.g. 8" required/>
 
-        <button type="submit">Calculate Fuel Cost</button>
-    </form>
-    <div class="result" id="result"></div>
+                <button type="submit">Calculate Fuel Cost</button>
+            </form>
+        </div>
+        <div class="result-section">
+            <div class="result" id="result"></div>
+        </div>
+    </div>
 </div>
 
-<!-- Leave these here , so it will load the html faster than the scripts  -->
+<!-- Leave these here, so it will load the html faster than the scripts  -->
 <script src="js/calendar.js"></script>
 <script src="js/fuelCalculator.js"></script>
 <script src="js/bandCalculator.js"></script>

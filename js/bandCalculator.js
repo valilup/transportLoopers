@@ -1,7 +1,8 @@
 // Band Cost Calculator
 document.getElementById("bandForm").addEventListener("submit", function (e) {
     e.preventDefault();
-
+    const clientName = document.getElementById("clientName").value;
+    const weddingLocation = document.getElementById("weddingLocation").value;
     const pricePerPerson = parseFloat(
         document.getElementById("pricePerPerson").value
     );
@@ -77,6 +78,19 @@ document.getElementById("bandForm").addEventListener("submit", function (e) {
         }
     }
 
+    let location = ""
+    if(weddingLocation){
+        location = `${weddingLocation}`
+    } else{
+        location = "LOCATION"
+    }
+
+    let client = ""
+    if(clientName){
+        client = `${clientName}`
+    } else{
+        client = "CLIENT"
+    }
 
     // Prepare the biserica line if applicable
     let bisericaLine = "";
@@ -98,8 +112,8 @@ document.getElementById("bandForm").addEventListener("submit", function (e) {
 
     <div style="margin-top: 30px; text-align: left; color: #333; line-height: 1.6;">
         <p>==================================</p>
-        <p>Salut CLIENT,</p>
-        <p>Am revenit cu oferta pentru <strong>${formattedEventDate}</strong>, <strong>LOCATION</strong></p>
+        <p>Salut ${client},</p>
+        <p>Am revenit cu oferta pentru <strong>${formattedEventDate}</strong>, <strong>${location}</strong></p>
 
         <h3>Ce oferim la eveniment:</h3>
         <ul>
@@ -181,11 +195,12 @@ document.getElementById("bandForm").addEventListener("submit", function (e) {
 
     const summaryText = `
 🧾 TOTAL PRICE: €${total.toFixed(2)}
+${client}
 
 ${summaryLines}
 `;
 
     const calendarBtn = document.getElementById("calendarBtn");
     calendarBtn.style.display = "block";
-    calendarBtn.onclick = () => createICSFile(summaryText, eventDateInput);
+    calendarBtn.onclick = () => createICSFile(summaryText, eventDateInput, location);
 });
