@@ -13,10 +13,14 @@ document.getElementById("calcForm").addEventListener("submit", function (e) {
 
     const consumption = rawConsumption / 100;
     const result = ((km * consumption) * 8) / 5;
+    const roundUp = Math.ceil(result/10) * 10;
 
     resultEl.style.color = "#2e7d32";
     resultEl.innerHTML =
-        `<div style="font-size: 1.8rem; font-weight: bold; color: #2e7d32; margin-top: 10px;">
+     `<div style="font-size: 1rem; font-weight: bold; color: #000000; margin-top: 10px;">
             ⛽ FUEL COST: €${result.toFixed(2)}
+        </div>
+        <div style="font-size: 1.8rem; font-weight: bold; color: #2e7d32; margin-top: 10px;">
+            ⛽ Suggested Price: €${roundUp.toFixed(2)}
         </div>`;
 });
