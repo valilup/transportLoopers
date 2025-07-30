@@ -117,7 +117,7 @@ document.getElementById("bandForm").addEventListener("submit", function (e) {
 
         <h3>Ce oferim la eveniment:</h3>
         <ul>
-            <li>✅ Garanta ca vom oferi momente de neuitat care vor dainui o viata intreaga pentru voi cat si pentru invitatii vostri</li>
+            <li>✅ Garantam ca vom oferi momente de neuitat care vor dainui o viata intreaga pentru voi cat si pentru invitatii vostri</li>
             <li>✅ Momente speciale:
                 <ul>
                     <li>⁠ ⁠Intrare miri cu muzică live</li>
